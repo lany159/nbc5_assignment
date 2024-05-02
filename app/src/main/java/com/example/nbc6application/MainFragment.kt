@@ -29,7 +29,7 @@ class MainFragment : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
 
-        val viewPagerAdapter = ViewPagerAdapter(requireActivity())//프레그먼트에 할당 된 컨텍스트를 끌고옴
+        val viewPagerAdapter = ViewPagerAdapter(this)//프레그먼트에 할당 된 컨텍스트를 끌고옴
         binding.viewPager.adapter = viewPagerAdapter
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tap, position ->
             when (position) {
@@ -43,7 +43,8 @@ class MainFragment : Fragment() {
                     tap.text = "내 보관함"
                 }
             }
-        }
+        }.attach()
+
         return binding.root
     }
 
