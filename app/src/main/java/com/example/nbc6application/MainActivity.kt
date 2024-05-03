@@ -1,6 +1,7 @@
 package com.example.nbc6application
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         setFragment()
+        communicateNetWork(" ")
     }
 
     private fun setFragment() {
@@ -36,7 +38,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun communicateNetWork(query:String) = lifecycleScope.launch{
-        val responseData = NetWorkClient.kakaoNetWork.getKakao()
-//        Log.d("Parsing Kakao ::", responseData)
+        //TODO
+        val responseData = NetWorkClient.kakaoNetWork.getKakao("cindy")
+        Log.d("debug100",responseData.toString())
+
     }
 }
