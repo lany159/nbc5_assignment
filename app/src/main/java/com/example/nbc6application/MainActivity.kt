@@ -1,15 +1,14 @@
 package com.example.nbc6application
 
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
+import com.example.nbc6application.api.NetWorkClient
 import com.example.nbc6application.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,5 +33,10 @@ class MainActivity : AppCompatActivity() {
             .replace(binding.frameLayout.id, MainFragment())
             .addToBackStack("")
             .commit()
+    }
+
+    private fun communicateNetWork(query:String) = lifecycleScope.launch{
+        val responseData = NetWorkClient.kakaoNetWork.getKakao()
+//        Log.d("Parsing Kakao ::", responseData)
     }
 }

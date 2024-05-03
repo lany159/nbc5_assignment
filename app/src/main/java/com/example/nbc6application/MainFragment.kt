@@ -55,16 +55,4 @@ class MainFragment : Fragment() {
     }
 
 
-//    private fun initSeachView(){
-//        binding.searchView.isSubmitButtonEnabled = true
-//        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                return true
-//            }
-//        })
-//    }
 }

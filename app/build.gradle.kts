@@ -36,11 +36,23 @@ android {
 
     buildFeatures{
         viewBinding = true
+        buildConfig = true
     }
 }
 
 dependencies {
-    //뷰페이저2
+    //retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    //HttpLoggingInterceptor
+    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    //GsonConverterFactory
+    implementation ("com.google.code.gson:gson:2.10.1")
+    //코루틴
+    implementation("org.jetbrains.kotlin:kotlin-ksp:1.4.0-rc-dev-experimental-20200828")
+
+    //viewpager2
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 
     implementation("androidx.fragment:fragment-ktx:1.6.2")
