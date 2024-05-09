@@ -1,20 +1,40 @@
 package com.example.nbc6application
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
+import android.view.inputmethod.InputMethodManager
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.lifecycleScope
+import com.example.nbc6application.adapter.KakaoImageDataClickListener
+import com.example.nbc6application.adapter.KakaoRecyclerViewAdapter
+import com.example.nbc6application.api.NetWorkClient
+import com.example.nbc6application.data.Documents
 import com.example.nbc6application.databinding.FragmentMainBinding
-import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.launch
 
 
 class MainFragment : Fragment() {
 
-    private var _binding: FragmentMainBinding? = null
-    private val binding: FragmentMainBinding
-        get() = _binding!!
+    private lateinit var binding: FragmentMainBinding
+
+    private var adapter: KakaoRecyclerViewAdapter =
+        KakaoRecyclerViewAdapter(kakaoImageDataClickListener = object : KakaoImageDataClickListener {
+            override fun onPassData(kakaoData: Documents) {
+//                val result = "result"
+//                setFragmentResult("requestKey", bundleOf("bundleKey" to result))
+//                parentFragmentManager.beginTransaction()
+//                    .replace(R.id.iv_like, DetailFragment())
+//                    //.replace(R.id.viewPager, DetailFragment())
+//                    .commit()
+                //room > save
+            }
+        })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,24 +46,7 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
-
-
-        val viewPagerAdapter = ViewPagerAdapter(this)//프레그먼트에 할당 된 컨텍스트를 끌고옴
-        binding.viewPager.adapter = viewPagerAdapter
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tap, position ->
-            when (position) {
-                0 -> {
-                    tap.setIcon(R.drawable.tap1)
-                    tap.text = "이미지 검색"
-                }
-
-                1 -> {
-                    tap.setIcon(R.drawable.tap2)
-                    tap.text = "내 보관함"
-                }
-            }
-        }.attach()
+        binding = FragmentMainBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -51,20 +54,32 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {//뷰 변경
         super.onViewCreated(view, savedInstanceState)
 
+        binding.recyclerView.adapter = this.adapter
 
+        binding.btnSearchClick.setOnClickListener {
+            if (binding.etSearchText.text.toString().isNotEmpty()) {
+                communicateNetWork(binding.etSearchText.text.toString())
+                hideKeyboard()
+                requireActivity().currentFocus!!.clearFocus()
+            } else {
+                return@setOnClickListener
+            }
+        }
     }
 
+    private fun communicateNetWork(query: String) = lifecycleScope.launch {
 
-//    private fun initSeachView(){
-//        binding.searchView.isSubmitButtonEnabled = true
-//        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                return true
-//            }
-//        })
-//    }
+        try {
+            val responseData = NetWorkClient.kakaoNetWork.getKakao(query, 80)
+            Log.d("debug100", responseData.toString())
+            adapter.submitList(responseData.documents) //데이터 갱신
+        }catch (e: retrofit2.HttpException){
+
+        }
+    }
+
+    private fun hideKeyboard(){
+        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
+    }
 }

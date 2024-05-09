@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -35,13 +37,32 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_end="20dp" />
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@id/glHorEnd"
+        app:layout_constraintBottom_toTopOf="@id/tabLayout"
         app:layout_constraintEnd_toEndOf="@id/glVerEnd"
         app:layout_constraintStart_toStartOf="@id/glVerStart"
-        app:layout_constraintTop_toTopOf="@id/glHorStart" />
+        app:layout_constraintTop_toTopOf="@id/glHorStart"  />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </com.google.android.material.tabs.TabLayout>
+
+<!--    <FrameLayout-->
+<!--        android:id="@+id/frameLayout"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/glHorEnd"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/glVerEnd"-->
+<!--        app:layout_constraintStart_toStartOf="@id/glVerStart"-->
+<!--        app:layout_constraintTop_toTopOf="@id/glHorStart" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
