@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    //room
+    id("kotlin-kapt")
 }
 
 android {
@@ -49,13 +51,16 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
     //GsonConverterFactory
     implementation ("com.google.code.gson:gson:2.10.1")
-    //코루틴
-//    implementation("org.jetbrains.kotlin:kotlin-ksp:1.4.0-rc-dev-experimental-20200828")
 
     //viewpager2
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 
+    //glide
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    androidTestImplementation("com.github.bumptech.glide:compiler:4.12.0")
+
     implementation("androidx.fragment:fragment-ktx:1.6.2")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -64,4 +69,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
 }

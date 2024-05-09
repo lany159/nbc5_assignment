@@ -10,13 +10,7 @@ interface NetWorkApi{
     @GET("v2/search/image")
 
     suspend fun getKakao(
-        //@Query("param1") param1 : String? = null
-        @Query("query") query:String
-//        @Query("sort") sort:String,
-//        @Query("page") page:Int,
-//        @Query("size") size:String
-    //필수가 아닌 것들은 작성하지 않아도 되는 것?
-        //작성하되 @Query("size") size:String? = null ?
+        @Query("query") query:String,
+        @Query("size") size:Int
     ) : KakaoData
 }
-//요청값

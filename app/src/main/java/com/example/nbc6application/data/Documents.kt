@@ -10,7 +10,7 @@ data class Documents(
     val height : Int,
     val display_sitename : String,
     val doc_url : String,
-    val datetime : Date
-    //val datetime : Date
-    //변수명이 하나라도 틀리면 안된다고 하는데, 그렇다면 저 변수명을 그대로 사용해도 되는 것?
+    val datetime : Date,
+    var isLike : Boolean
+    //변수명 그대로 사용 가능 > 이름 변경 시 @SerializedName("") 이용
 )

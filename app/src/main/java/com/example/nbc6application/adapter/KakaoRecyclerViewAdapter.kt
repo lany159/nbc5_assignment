@@ -1,33 +1,58 @@
 package com.example.nbc6application.adapter
 
+import android.content.Context
+import android.os.Parcel
+import android.os.Parcelable
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.nbc6application.data.Documents
 import com.example.nbc6application.data.KakaoData
 import com.example.nbc6application.databinding.ItemGridBinding
 
-class KakaoRecyclerViewAdapter(val kakoList: List<KakaoData>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+interface KakaoImageClickListener {
+    fun onClickItem(kakaoData: Documents)
+}
 
-    class ViewHoler(private val binding: ItemGridBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(kakaoData: KakaoData){
-        //이미지 연결 binding.ivProfile
-            //필요한 리스트 중에 필요한 것만 가져오는 것인지?
-            //루트가 카카오데이터의 documents이긴 하나, documents의 데이터 클래스로 직접 가져와야 하는지?
-            //> 그렇다면 val kakoList: List<KakaoData> 를 <Documents>로 수정
-            binding.tvTitle.text = kakaoData.documents.toString()
-            binding.tvDate.text = kakaoData.documents.toString()
-        }
+interface KakaoImageDataClickListener{
+    fun onPassData(kakaoData: Documents)
+}
+
+class KakaoRecyclerViewAdapter(
+    private val kakaoImageDataClickListener: KakaoImageDataClickListener
+) : RecyclerView.Adapter<KakaoViewHoler>() {
+
+    var kakoList: List<Documents> = emptyList()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KakaoViewHoler {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        return KakaoViewHoler(
+            binding = ItemGridBinding.inflate(layoutInflater, parent, false),
+            object : KakaoImageClickListener{
+                override fun onClickItem(kakaoData: Documents) {
+                    notifyDataSetChanged()
+                    kakaoImageDataClickListener.onPassData(kakaoData)
+                }
+            }
+        )
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        TODO("Not yet implemented")
+    override fun onBindViewHolder(holder: KakaoViewHoler, position: Int) {
+        val kakaoItem = kakoList[position]
+        holder.bind(kakaoItem = kakaoItem)
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return this.kakoList.size
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+    fun submitList(item: List<Documents>) {
+        this.kakoList = item
+        notifyDataSetChanged()
     }
 }
+
