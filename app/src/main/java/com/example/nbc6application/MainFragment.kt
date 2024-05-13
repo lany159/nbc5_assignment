@@ -7,11 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
-import com.example.nbc6application.adapter.KakaoImageDataClickListener
+import com.example.nbc6application.adapter.KakaoImageClickListener
 import com.example.nbc6application.adapter.KakaoRecyclerViewAdapter
 import com.example.nbc6application.api.NetWorkClient
 import com.example.nbc6application.data.Documents
@@ -22,19 +20,12 @@ import kotlinx.coroutines.launch
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
+    private var kakaoDataList = mutableListOf<Documents>()
 
-    private var adapter: KakaoRecyclerViewAdapter =
-        KakaoRecyclerViewAdapter(kakaoImageDataClickListener = object : KakaoImageDataClickListener {
-            override fun onPassData(kakaoData: Documents) {
-//                val result = "result"
-//                setFragmentResult("requestKey", bundleOf("bundleKey" to result))
-//                parentFragmentManager.beginTransaction()
-//                    .replace(R.id.iv_like, DetailFragment())
-//                    //.replace(R.id.viewPager, DetailFragment())
-//                    .commit()
-                //room > save
-            }
-        })
+    private val adapter: KakaoRecyclerViewAdapter by lazy {
+        createAdapter()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,14 +63,30 @@ class MainFragment : Fragment() {
         try {
             val responseData = NetWorkClient.kakaoNetWork.getKakao(query, 80)
             Log.d("debug100", responseData.toString())
-            adapter.submitList(responseData.documents) //데이터 갱신
-        }catch (e: retrofit2.HttpException){
+            kakaoDataList.addAll(responseData.documents)
+            adapter.submitList(kakaoDataList) //데이터 갱신
+        } catch (e: retrofit2.HttpException) {
 
         }
     }
 
-    private fun hideKeyboard(){
-        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    private fun hideKeyboard() {
+        val imm =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
+    }
+
+    private fun createAdapter(): KakaoRecyclerViewAdapter {
+        return KakaoRecyclerViewAdapter(kakaoImageClickListener = object : KakaoImageClickListener {
+            override fun onClickItem(kakaoData: Documents) {
+                val index = kakaoDataList.indexOf(kakaoData) //인덱스 찾기
+                kakaoDataList.set(
+                    index, kakaoData.copy(
+                        isLike = !kakaoData.isLike
+                    )
+                )
+                adapter.submitList(kakaoDataList)
+            }
+        })
     }
 }

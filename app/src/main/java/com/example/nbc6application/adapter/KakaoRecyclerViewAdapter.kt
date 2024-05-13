@@ -18,12 +18,11 @@ interface KakaoImageClickListener {
     fun onClickItem(kakaoData: Documents)
 }
 
-interface KakaoImageDataClickListener{
-    fun onPassData(kakaoData: Documents)
-}
+
 
 class KakaoRecyclerViewAdapter(
-    private val kakaoImageDataClickListener: KakaoImageDataClickListener
+    private val kakaoImageClickListener: KakaoImageClickListener
+
 ) : RecyclerView.Adapter<KakaoViewHoler>() {
 
     var kakoList: List<Documents> = emptyList()
@@ -32,12 +31,13 @@ class KakaoRecyclerViewAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         return KakaoViewHoler(
             binding = ItemGridBinding.inflate(layoutInflater, parent, false),
-            object : KakaoImageClickListener{
-                override fun onClickItem(kakaoData: Documents) {
-                    notifyDataSetChanged()
-                    kakaoImageDataClickListener.onPassData(kakaoData)
-                }
-            }
+            kakaoImageClickListener = kakaoImageClickListener
+//            object : KakaoImageClickListener{
+//                override fun onClickItem(kakaoData: Documents) {
+//                    notifyDataSetChanged()
+//                    kakaoImageDataClickListener.onPassData(kakaoData)
+//                }
+//            }
         )
     }
 

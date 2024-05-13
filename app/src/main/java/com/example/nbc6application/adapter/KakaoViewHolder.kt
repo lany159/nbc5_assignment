@@ -8,20 +8,16 @@ import com.example.nbc6application.databinding.ItemGridBinding
 
 class KakaoViewHoler(
     private val binding: ItemGridBinding,
-    private val kakaoImageClickListener: KakaoImageClickListener
+    private val kakaoImageClickListener: KakaoImageClickListener,
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
     private var kakaoData: Documents? = null
 
     init {
-        binding.root.setOnClickListener {
+        binding.ivProfile.setOnClickListener {
             kakaoData?.let {
                 kakaoImageClickListener.onClickItem(kakaoData = it)
-//                it.copy(
-//                    isLike = !it.isLike
-//                )
-                  it.isLike = !it.isLike
             }
         }
     }
