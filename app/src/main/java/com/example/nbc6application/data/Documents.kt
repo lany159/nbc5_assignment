@@ -12,5 +12,6 @@ data class Documents(
     val doc_url : String,
     val datetime : Date,
     var isLike : Boolean
+//    val isLike : Boolean
     //변수명 그대로 사용 가능 > 이름 변경 시 @SerializedName("") 이용
 )
